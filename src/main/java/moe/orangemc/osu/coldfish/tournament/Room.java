@@ -6,9 +6,10 @@ import moe.orangemc.osu.al1s.api.user.User;
 import moe.orangemc.osu.coldfish.tournament.state.StateWaitress;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
-public class TournamentRoom {
-    private final TournamentSession tournamentSession;
+public class Room {
+    private final Session session;
 
     private final Map<User, MultiplayerTeam> players = new HashMap<>();
     private MatchRoom room = null;
@@ -28,8 +29,8 @@ public class TournamentRoom {
     private final int roundsToWin;
     private final long startTime;
 
-    public TournamentRoom(TournamentSession tournamentSession, int roundsToWin, long startTime) {
-        this.tournamentSession = tournamentSession;
+    public Room(Session session, int roundsToWin, long startTime) {
+        this.session = session;
 
         this.roundsToWin = roundsToWin;
         this.startTime = startTime;
@@ -37,5 +38,25 @@ public class TournamentRoom {
 
     public void initiateMatchRoom() {
 
+    }
+
+    public MatchRoom getMatchRoom() {
+        return room;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public MultiplayerTeam getPlayerTeam(User user) {
+        return players.get(user);
+    }
+    public Set<User> getParticipants() {
+        return players.keySet();
+    }
+
+    public void transitState(BiConsumer<Stack<StateWaitress>, Queue<MultiplayerTeam>> state) {
+        state.accept(stateStack, activeTeam);
+        stateStack.peek().engage(this);
     }
 }

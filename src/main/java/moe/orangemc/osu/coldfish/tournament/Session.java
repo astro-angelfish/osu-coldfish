@@ -9,7 +9,7 @@ import moe.orangemc.osu.coldfish.tournament.map.MapPool;
 
 import java.util.*;
 
-public class TournamentSession {
+public class Session {
     private final Ruleset ruleset;
     private final String tournamentAbbreviation;
     private final TeamMode teamMode;
@@ -37,9 +37,9 @@ public class TournamentSession {
     private final Map<Mod, Double> scoreModifier = new HashMap<>();
 
     private final Map<String, MapPool> rounds = new HashMap<>();
-    private final Set<TournamentRoom> brackets = new HashSet<>();
+    private final Set<Room> brackets = new HashSet<>();
 
-    public TournamentSession(GoogleSheetLoader loader) {
+    public Session(GoogleSheetLoader loader) {
 
     }
 

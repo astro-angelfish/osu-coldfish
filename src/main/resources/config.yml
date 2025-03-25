@@ -1,0 +1,5 @@
+google-sheet:
+  client_secret_file: "path-to-secret.json"
+
+discord:
+  token: "your-discord-bot-token"
