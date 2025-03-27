@@ -22,6 +22,10 @@ public class Session {
     // these are minutes; seconds are way too long
     private final int banTime;
     private final int forfeitTime;
+    private final int pauseTime;
+
+    // Number of pauses
+    private final int pauseNumber;
 
     private final int banChoices;
     private final int protectChoices;
@@ -74,6 +78,10 @@ public class Session {
     public int getForfeitTime() {
         return forfeitTime;
     }
+
+    public int getPauseTime() {return pauseTime;}
+
+    public int getPauseNumber() {return pauseNumber;}
 
     public int getBanChoices() {
         return banChoices;
