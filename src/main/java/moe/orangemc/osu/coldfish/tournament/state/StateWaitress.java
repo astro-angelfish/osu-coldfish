@@ -9,6 +9,10 @@ public interface StateWaitress {
     void engage(Room room);
     void timeout(Room room);
 
+    default int getTimeout(Room room) {
+        return room.getSession().getPickTime();
+    }
+
     default void captureEvent(Room room, MatchRoomEvent evt) {}
     default void captureCommandIssue(Room room, CommandBase cmd, User issuer) {}
 }

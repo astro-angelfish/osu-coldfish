@@ -48,6 +48,17 @@ public class RollWaitress implements StateWaitress {
             }
 
             completedRoom.add(room);
+            room.transitState((state, actor) -> {
+                state.pop();
+
+                if (rollDelta.get(room) > 0) {
+                    actor.add(MultiplayerTeam.RED);
+                    actor.add(MultiplayerTeam.BLUE);
+                } else {
+                    actor.add(MultiplayerTeam.BLUE);
+                    actor.add(MultiplayerTeam.RED);
+                }
+            });
         }
 
         rollDelta.compute(room, (key, val) -> val == null ? finalPoint : val + finalPoint);

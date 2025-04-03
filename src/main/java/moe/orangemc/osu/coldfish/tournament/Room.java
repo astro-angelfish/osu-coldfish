@@ -4,6 +4,10 @@ import moe.orangemc.osu.al1s.api.mutltiplayer.MatchRoom;
 import moe.orangemc.osu.al1s.api.mutltiplayer.MultiplayerTeam;
 import moe.orangemc.osu.al1s.api.user.User;
 import moe.orangemc.osu.coldfish.tournament.state.StateWaitress;
+import moe.orangemc.osu.coldfish.tournament.state.early.RollWaitress;
+import moe.orangemc.osu.coldfish.tournament.state.strategy.BanWaitress;
+import moe.orangemc.osu.coldfish.tournament.state.strategy.PickingWaitress;
+import moe.orangemc.osu.coldfish.tournament.state.strategy.ProtectWaitress;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -37,7 +41,38 @@ public class Room {
     }
 
     public void initiateMatchRoom() {
+        initiateRoomState();
+    }
 
+    private void initiateRoomState() {
+        this.stateStack.clear();
+
+        int remainBanChoices = session.getBanChoices();
+        int remainProtectChoices = session.getProtectChoices();
+
+        this.stateStack.push(PickingWaitress.INSTANCE);
+        boolean inserted = false;
+
+        while (remainProtectChoices > 0 || remainBanChoices > 0) {
+            for (int i = 0; i < session.getBanInterval() && inserted; i ++) {
+                this.stateStack.push(PickingWaitress.INSTANCE);
+            }
+
+            inserted = false;
+
+            if (remainBanChoices > 0) {
+                this.stateStack.push(BanWaitress.INSTANCE);
+                remainBanChoices--;
+                inserted = true;
+            }
+            if (remainProtectChoices > 0) {
+                this.stateStack.push(ProtectWaitress.INSTANCE);
+                remainProtectChoices--;
+                inserted = true;
+            }
+        }
+
+        this.stateStack.push(RollWaitress.INSTANCE);
     }
 
     public MatchRoom getMatchRoom() {
