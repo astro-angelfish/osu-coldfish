@@ -8,7 +8,8 @@ import moe.orangemc.osu.al1s.api.event.chat.SystemMessagePoll;
 import moe.orangemc.osu.al1s.api.mutltiplayer.MatchRoom;
 import moe.orangemc.osu.al1s.api.user.User;
 import moe.orangemc.osu.al1s.inject.api.Inject;
-import moe.orangemc.osu.coldfish.event.MatchRollEvent;
+import moe.orangemc.osu.coldfish.tournament.ColdfishRoomManager;
+import moe.orangemc.osu.coldfish.tournament.state.early.RollWaitress;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -16,6 +17,8 @@ import java.util.regex.Pattern;
 public class PlayerRollListener {
     @Inject
     private EventBus bus;
+    @Inject
+    private ColdfishRoomManager roomManager;
 
     private static final Pattern rollMessage = Pattern.compile("(.+) rolls (\\d+) point\\(s\\)");
 
@@ -61,7 +64,7 @@ public class PlayerRollListener {
                         continue;
                     }
 
-                    bus.fire(new MatchRollEvent(room, user, rollValue));
+                    RollWaitress.INSTANCE.captureRoll(roomManager.findRoom(room), user, rollValue);
                     iterator.remove();
                     break;
                 }

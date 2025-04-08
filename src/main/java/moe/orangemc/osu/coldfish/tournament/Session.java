@@ -35,7 +35,7 @@ public class Session {
     private final List<Boolean> initialOrders = new ArrayList<>();
     private final boolean revertInitialPickOrder;
 
-    // eg: hd = [ hd, ez, [hd, ez] ], hr = [ hr, [hd, hr] ]
+    // eg: hd = [ [hd], [ez], [hd, ez] ], hr = [ [hr], [hd, hr] ]
     private final Map<Mod, Set<Set<Mod>>> equivalentMods = new HashMap<>();
     // Applied after vanilla osu! score modifier.
     private final Map<Mod, Double> scoreModifier = new HashMap<>();

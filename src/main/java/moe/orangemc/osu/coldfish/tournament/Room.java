@@ -3,6 +3,8 @@ package moe.orangemc.osu.coldfish.tournament;
 import moe.orangemc.osu.al1s.api.mutltiplayer.MatchRoom;
 import moe.orangemc.osu.al1s.api.mutltiplayer.MultiplayerTeam;
 import moe.orangemc.osu.al1s.api.user.User;
+import moe.orangemc.osu.coldfish.tournament.map.ActiveMapPool;
+import moe.orangemc.osu.coldfish.tournament.map.MapPool;
 import moe.orangemc.osu.coldfish.tournament.state.StateWaitress;
 import moe.orangemc.osu.coldfish.tournament.state.early.RollWaitress;
 import moe.orangemc.osu.coldfish.tournament.state.strategy.BanWaitress;
@@ -33,11 +35,14 @@ public class Room {
     private final int roundsToWin;
     private final long startTime;
 
-    public Room(Session session, int roundsToWin, long startTime) {
+    private final ActiveMapPool mapPool;
+
+    public Room(Session session, int roundsToWin, long startTime, MapPool mapPool) {
         this.session = session;
 
         this.roundsToWin = roundsToWin;
         this.startTime = startTime;
+        this.mapPool = new ActiveMapPool(mapPool);
     }
 
     public void initiateMatchRoom() {
@@ -93,5 +98,17 @@ public class Room {
     public void transitState(BiConsumer<Stack<StateWaitress>, Queue<MultiplayerTeam>> state) {
         state.accept(stateStack, activeTeam);
         stateStack.peek().engage(this);
+    }
+
+    public ActiveMapPool getMapPool() {
+        return mapPool;
+    }
+
+    public boolean isStateCurrent(StateWaitress who) {
+        return stateStack.peek() == who;
+    }
+
+    public boolean isActiveTeam(MultiplayerTeam team) {
+        return activeTeam.peek() == team;
     }
 }

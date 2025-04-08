@@ -1,8 +1,7 @@
 package moe.orangemc.osu.coldfish.tournament.state.early;
 
-import moe.orangemc.osu.al1s.api.event.multiplayer.MatchRoomEvent;
 import moe.orangemc.osu.al1s.api.mutltiplayer.MultiplayerTeam;
-import moe.orangemc.osu.coldfish.event.MatchRollEvent;
+import moe.orangemc.osu.al1s.api.user.User;
 import moe.orangemc.osu.coldfish.tournament.Room;
 import moe.orangemc.osu.coldfish.tournament.state.StateWaitress;
 
@@ -29,18 +28,13 @@ public class RollWaitress implements StateWaitress {
 
     }
 
-    @Override
-    public void captureEvent(Room room, MatchRoomEvent evt) {
-        if (!(evt instanceof MatchRollEvent rollEvt)) {
+    public void captureRoll(Room room, User roller, int value) {
+        if (completedRoom.contains(room) || !room.isStateCurrent(this)) {
             return;
         }
 
-        if (completedRoom.contains(room)) {
-            return;
-        }
-
-        int finalPoint = rollEvt.getRoll() *
-                (room.getPlayerTeam(rollEvt.getUser()) == MultiplayerTeam.RED ? 1 : -1);
+        int finalPoint = value *
+                (room.getPlayerTeam(roller) == MultiplayerTeam.RED ? 1 : -1);
 
         if (rollDelta.containsKey(room)) {
             if (rollDelta.get(room) * finalPoint > 0) { // same team rolling.
