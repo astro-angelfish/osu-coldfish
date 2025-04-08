@@ -50,13 +50,10 @@ public class RollWaitress implements StateWaitress {
             completedRoom.add(room);
             room.transitState((state, actor) -> {
                 state.pop();
-
-                if (rollDelta.get(room) > 0) {
-                    actor.add(MultiplayerTeam.RED);
-                    actor.add(MultiplayerTeam.BLUE);
-                } else {
-                    actor.add(MultiplayerTeam.BLUE);
-                    actor.add(MultiplayerTeam.RED);
+                MultiplayerTeam rollWinner = rollDelta.get(room) > 0 ? MultiplayerTeam.RED : MultiplayerTeam.BLUE;
+                for (boolean useWinner : room.getSession().getInitialOrders()) {
+                    MultiplayerTeam current = useWinner ? rollWinner : rollWinner.getOpposite();
+                    actor.add(current);
                 }
             });
         }
