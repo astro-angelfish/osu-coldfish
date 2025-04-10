@@ -4,6 +4,7 @@ import moe.orangemc.osu.al1s.api.mutltiplayer.MultiplayerTeam;
 import moe.orangemc.osu.al1s.api.user.User;
 import moe.orangemc.osu.coldfish.tournament.Room;
 import moe.orangemc.osu.coldfish.tournament.state.StateWaitress;
+import moe.orangemc.osu.coldfish.tournament.state.strategy.OperationDecisionWaitress;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +29,11 @@ public class RollWaitress implements StateWaitress {
 
     }
 
+    @Override
+    public int getTimeout(Room room) {
+        return room.getSession().getForfeitTime() * 60;
+    }
+
     public void captureRoll(Room room, User roller, int value) {
         if (completedRoom.contains(room) || !room.isStateCurrent(this)) {
             return;
@@ -44,11 +50,10 @@ public class RollWaitress implements StateWaitress {
             completedRoom.add(room);
             room.transitState((state, actor) -> {
                 state.pop();
+
                 MultiplayerTeam rollWinner = rollDelta.get(room) > 0 ? MultiplayerTeam.RED : MultiplayerTeam.BLUE;
-                for (boolean useWinner : room.getSession().getInitialOrders()) {
-                    MultiplayerTeam current = useWinner ? rollWinner : rollWinner.getOpposite();
-                    actor.add(current);
-                }
+                state.push(OperationDecisionWaitress.INSTANCE);
+                actor.offer(rollWinner);
             });
         }
 

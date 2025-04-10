@@ -8,33 +8,31 @@ import moe.orangemc.osu.al1s.api.user.User;
 import moe.orangemc.osu.al1s.inject.api.Inject;
 import moe.orangemc.osu.coldfish.tournament.ColdfishRoomManager;
 import moe.orangemc.osu.coldfish.tournament.Room;
-import moe.orangemc.osu.coldfish.tournament.state.strategy.BanWaitress;
+import moe.orangemc.osu.coldfish.tournament.state.strategy.OperationDecisionWaitress;
 
-public class BanCommand implements CommandBase {
+public class DecideCommand implements CommandBase {
     @Inject
     private ColdfishRoomManager roomManager;
 
-    public static final BanCommand INSTANCE = new BanCommand();
-
-    private BanCommand() {}
-
     @Override
     public String getName() {
-        return "ban";
+        return "decide";
     }
 
     @Override
     public String getDescription() {
-        return "Ban a map, preventing them from getting picked";
+        return "Make a decision, whether to act first";
     }
 
     @Override
     public String getUsage() {
-        return "<Map id>";
+        return "[first|second]";
     }
 
     @Command
-    public void ban(User issuer, OsuChannel source, String mapId) {
+    public void decide(User issuer, OsuChannel source, String decision) {
+        boolean first = decision.equalsIgnoreCase("first");
+
         if (!(source instanceof MatchRoom room)) {
             source.sendMessage("This command can only be used in a match room.");
             return;
@@ -46,6 +44,6 @@ public class BanCommand implements CommandBase {
             return;
         }
 
-        BanWaitress.INSTANCE.captureCommandIssue(tournamentRoom, issuer, mapId);
+        OperationDecisionWaitress.INSTANCE.captureCommandIssue(tournamentRoom, issuer, first);
     }
 }

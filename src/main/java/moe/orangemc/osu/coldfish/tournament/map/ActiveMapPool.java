@@ -1,7 +1,10 @@
 package moe.orangemc.osu.coldfish.tournament.map;
 
+import moe.orangemc.osu.al1s.api.beatmap.Beatmap;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class ActiveMapPool {
     private final MapPool parent;
@@ -68,5 +71,17 @@ public class ActiveMapPool {
         checkBanPick(identifier, mask);
 
         pickedMask.put(identifier, pickedMask.get(identifier) | mask);
+    }
+
+    public Beatmap getBeatmap(String id) {
+        return parent.getBeatmap(id);
+    }
+
+    private void validateMapId(String id) {
+        try {
+            parent.getBeatmap(id);
+        } catch (IllegalArgumentException | NoSuchElementException e) {
+            throw new IllegalArgumentException("Invalid map identifier: " + id, e);
+        }
     }
 }

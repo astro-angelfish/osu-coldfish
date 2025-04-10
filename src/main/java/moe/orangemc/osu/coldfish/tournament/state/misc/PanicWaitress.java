@@ -13,4 +13,9 @@ public class PanicWaitress implements StateWaitress {
     public void timeout(Room room) {
 
     }
+
+    @Override
+    public int getTimeout(Room room) {
+        return Integer.MAX_VALUE;
+    }
 }

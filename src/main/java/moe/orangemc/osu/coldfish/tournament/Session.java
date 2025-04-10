@@ -99,7 +99,7 @@ public class Session {
         return initialOrders;
     }
 
-    public boolean isRevertInitialPickOrder() {
+    public boolean doRevertInitialPickOrder() {
         return revertInitialPickOrder;
     }
 

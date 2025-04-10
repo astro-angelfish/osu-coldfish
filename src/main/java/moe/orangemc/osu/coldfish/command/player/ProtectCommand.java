@@ -8,24 +8,20 @@ import moe.orangemc.osu.al1s.api.user.User;
 import moe.orangemc.osu.al1s.inject.api.Inject;
 import moe.orangemc.osu.coldfish.tournament.ColdfishRoomManager;
 import moe.orangemc.osu.coldfish.tournament.Room;
-import moe.orangemc.osu.coldfish.tournament.state.strategy.BanWaitress;
+import moe.orangemc.osu.coldfish.tournament.state.strategy.ProtectWaitress;
 
-public class BanCommand implements CommandBase {
+public class ProtectCommand implements CommandBase {
     @Inject
     private ColdfishRoomManager roomManager;
 
-    public static final BanCommand INSTANCE = new BanCommand();
-
-    private BanCommand() {}
-
     @Override
     public String getName() {
-        return "ban";
+        return "protect";
     }
 
     @Override
     public String getDescription() {
-        return "Ban a map, preventing them from getting picked";
+        return "Protect a beatmap, disallows it from being banned";
     }
 
     @Override
@@ -34,7 +30,7 @@ public class BanCommand implements CommandBase {
     }
 
     @Command
-    public void ban(User issuer, OsuChannel source, String mapId) {
+    public void protect(User issuer, OsuChannel source, String mapId) {
         if (!(source instanceof MatchRoom room)) {
             source.sendMessage("This command can only be used in a match room.");
             return;
@@ -46,6 +42,6 @@ public class BanCommand implements CommandBase {
             return;
         }
 
-        BanWaitress.INSTANCE.captureCommandIssue(tournamentRoom, issuer, mapId);
+        ProtectWaitress.INSTANCE.captureCommandIssue(tournamentRoom, issuer, mapId);
     }
 }
