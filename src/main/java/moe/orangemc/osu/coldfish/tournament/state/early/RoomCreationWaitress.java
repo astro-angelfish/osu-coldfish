@@ -20,6 +20,6 @@ public class RoomCreationWaitress implements StateWaitress {
 
     @Override
     public void timeout(Room room) {
-
+        room.transitState((state, actors) -> state.pop());
     }
 }

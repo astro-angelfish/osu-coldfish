@@ -4,7 +4,7 @@ import moe.orangemc.osu.al1s.api.mutltiplayer.TeamMode;
 import moe.orangemc.osu.al1s.api.mutltiplayer.WinCondition;
 import moe.orangemc.osu.al1s.api.ruleset.Mod;
 import moe.orangemc.osu.al1s.api.ruleset.Ruleset;
-import moe.orangemc.osu.coldfish.io.sheet.GoogleSheetLoader;
+import moe.orangemc.osu.coldfish.io.sheet.SheetLoader;
 import moe.orangemc.osu.coldfish.tournament.map.MapPool;
 
 import java.util.*;
@@ -35,7 +35,7 @@ public class Session {
     private final List<Boolean> initialOrders = new ArrayList<>();
     private final boolean revertInitialPickOrder;
 
-    // eg: hd = [ hd, ez, [hd, ez] ], hr = [ hr, [hd, hr] ]
+    // eg: hd = [ [hd], [ez], [hd, ez] ], hr = [ [hr], [hd, hr] ]
     private final Map<Mod, Set<Set<Mod>>> equivalentMods = new HashMap<>();
     // Applied after vanilla osu! score modifier.
     private final Map<Mod, Double> scoreModifier = new HashMap<>();
@@ -43,8 +43,33 @@ public class Session {
     private final Map<String, MapPool> rounds = new HashMap<>();
     private final Set<Room> brackets = new HashSet<>();
 
-    public Session(GoogleSheetLoader loader) {
+    public Session(SheetLoader loader) {
+        this.ruleset = loader.readRuleset();
+        this.tournamentAbbreviation = loader.readTournamentAbbreviation();
+        this.teamMode = loader.readTeamMode();
+        this.winCondition = loader.readWinCondition();
 
+        this.pickTime = loader.readPickTime();
+        this.prepareTime = loader.readPrepareTime();
+
+        this.banTime = loader.readBanTime();
+        this.forfeitTime = loader.readForfeitTime();
+        this.pauseTime = loader.readPauseTime();
+
+        this.pauseNumber = loader.readPauseNumber();
+
+        this.banChoices = loader.readBanChoices();
+        this.protectChoices = loader.readProtectChoices();
+
+        this.banInterval = loader.readBanInterval();
+
+        loader.readInitialOrders(initialOrders);
+        this.revertInitialPickOrder = loader.readRevertInitialPickOrder();
+
+        loader.readEquivalentMods(equivalentMods);
+        loader.readScoreModifier(scoreModifier);
+
+        loader.readRounds(rounds);
     }
 
     public Ruleset getRuleset() {
@@ -99,12 +124,19 @@ public class Session {
         return initialOrders;
     }
 
-    public boolean isRevertInitialPickOrder() {
+    public boolean doRevertInitialPickOrder() {
         return revertInitialPickOrder;
     }
 
-    public Map<Mod, Set<Set<Mod>>> getEquivalentMods() {
-        return equivalentMods;
+    public Mod mapEquivalentMod(Set<Mod> modSet) {
+        for (Map.Entry<Mod, Set<Set<Mod>>> entry : equivalentMods.entrySet()) {
+            for (Set<Mod> set : entry.getValue()) {
+                if (set.equals(modSet)) {
+                    return entry.getKey();
+                }
+            }
+        }
+        throw new NoSuchElementException();
     }
 
     public Map<Mod, Double> getScoreModifier() {
