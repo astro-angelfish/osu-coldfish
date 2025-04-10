@@ -29,6 +29,11 @@ public class PrepareWaitress implements StateWaitress {
         });
     }
 
+    @Override
+    public int getTimeout(Room room) {
+        return room.getSession().getPrepareTime() * 60;
+    }
+
     public void captureEvent(Room room, MatchRoomEvent evt) {
         if (evt instanceof AllReadyEvent) {
             if (checkPlayerMod(room)){

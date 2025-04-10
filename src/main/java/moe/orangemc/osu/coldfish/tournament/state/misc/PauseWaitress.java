@@ -13,4 +13,9 @@ public class PauseWaitress implements StateWaitress {
     public void timeout(Room room) {
 
     }
+
+    @Override
+    public int getTimeout(Room room) {
+        return room.getSession().getPauseTime() * 60;
+    }
 }
