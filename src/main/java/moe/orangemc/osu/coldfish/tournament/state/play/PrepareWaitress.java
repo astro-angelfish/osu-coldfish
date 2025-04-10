@@ -24,10 +24,11 @@ public class PrepareWaitress implements StateWaitress {
         if (checkPlayerSlot(room)){
             changePlayerSlot(room.getMatchRoom());
         }
-        room.getMatchRoom().start(7);
+        room.transitState((state, actors) -> {
+            state.push(PlayingWaitress.INSTANCE);
+        });
     }
 
-    @Override
     public void captureEvent(Room room, MatchRoomEvent evt) {
         if (evt instanceof AllReadyEvent) {
             if (checkPlayerMod(room)){
@@ -42,7 +43,9 @@ public class PrepareWaitress implements StateWaitress {
             if (checkPlayerSlot(room)){
                 changePlayerSlot(room.getMatchRoom());
             }
-            room.getMatchRoom().start(7);
+            room.transitState((state, actors) -> {
+                state.push(PlayingWaitress.INSTANCE);
+            });
         }
     }
 

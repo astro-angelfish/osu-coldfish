@@ -19,6 +19,7 @@ public class PlayingWaitress implements StateWaitress {
     @Override
     public void engage(Room room) {
         playerScoreDeltas.put(room, new HashMap<>());
+        room.getMatchRoom().start(7);
     }
 
     @Override
@@ -26,7 +27,6 @@ public class PlayingWaitress implements StateWaitress {
 
     }
 
-    @Override
     public void captureEvent(Room room, MatchRoomEvent evt) {
         if (!(evt instanceof PlayerFinishPlayEvent playerFinishPlayEvent)) {
             return;

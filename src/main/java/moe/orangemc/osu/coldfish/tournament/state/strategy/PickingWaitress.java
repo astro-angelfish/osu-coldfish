@@ -26,7 +26,11 @@ public class PickingWaitress implements StateWaitress {
             return;
         }
 
-        room.getMapPool().markPick(mapId);
+        try {
+            room.getMapPool().markPick(mapId);
+        } catch (IllegalStateException e) {
+            room.getMatchRoom().sendMessage(e.getMessage());
+        }
         room.setCurrentBeatmap(room.getMapPool().getBeatmap(mapId));
 
         room.transitState((state, actors) -> {
