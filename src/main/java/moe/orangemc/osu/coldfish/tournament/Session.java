@@ -15,6 +15,8 @@ public class Session {
     private final TeamMode teamMode;
     private final WinCondition winCondition;
 
+    private final int teamSize;
+
     // below are counted in seconds
     private final int pickTime;
     private final int prepareTime;
@@ -48,6 +50,8 @@ public class Session {
         this.tournamentAbbreviation = loader.readTournamentAbbreviation();
         this.teamMode = loader.readTeamMode();
         this.winCondition = loader.readWinCondition();
+
+        this.teamSize = loader.readTeamSize();
 
         this.pickTime = loader.readPickTime();
         this.prepareTime = loader.readPrepareTime();
@@ -88,6 +92,10 @@ public class Session {
         return winCondition;
     }
 
+    public int getTeamSize() {
+        return teamSize;
+    }
+
     public int getPickTime() {
         return pickTime;
     }
@@ -104,9 +112,13 @@ public class Session {
         return forfeitTime;
     }
 
-    public int getPauseTime() {return pauseTime;}
+    public int getPauseTime() {
+        return pauseTime;
+    }
 
-    public int getPauseNumber() {return pauseNumber;}
+    public int getPauseNumber() {
+        return pauseNumber;
+    }
 
     public int getBanChoices() {
         return banChoices;

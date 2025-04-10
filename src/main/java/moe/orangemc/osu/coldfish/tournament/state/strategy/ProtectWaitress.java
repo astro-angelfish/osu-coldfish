@@ -10,7 +10,7 @@ public class ProtectWaitress extends PickingWaitress {
     private ProtectWaitress() {}
 
     public void captureCommandIssue(Room room, User issuer, String mapId) {
-        if (!room.isStateCurrent(this) || !room.isActiveTeam(room.getPlayerTeam(issuer))) {
+        if (room.notStateCurrent(this) || room.notActiveTeam(room.getPlayerTeam(issuer))) {
             return;
         }
 

@@ -22,15 +22,11 @@ public class PickingWaitress implements StateWaitress {
     }
 
     public void captureCommandIssue(Room room, User performer, String mapId) {
-        if (!room.isStateCurrent(this) || !room.isActiveTeam(room.getPlayerTeam(performer))) {
+        if (room.notStateCurrent(this) || room.notActiveTeam(room.getPlayerTeam(performer))) {
             return;
         }
 
-        try {
-            room.getMapPool().markPick(mapId);
-        } catch (IllegalStateException e) {
-            room.getMatchRoom().sendMessage(e.getMessage());
-        }
+        room.getMapPool().markPick(mapId);
         room.setCurrentBeatmap(room.getMapPool().getBeatmap(mapId));
 
         room.transitState((state, actors) -> {

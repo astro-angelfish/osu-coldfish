@@ -108,12 +108,12 @@ public class Room {
         return mapPool;
     }
 
-    public boolean isStateCurrent(StateWaitress who) {
-        return stateStack.peek() == who;
+    public boolean notStateCurrent(StateWaitress who) {
+        return stateStack.peek() != who;
     }
 
-    public boolean isActiveTeam(MultiplayerTeam team) {
-        return activeTeam.peek() == team;
+    public boolean notActiveTeam(MultiplayerTeam team) {
+        return activeTeam.peek() != team;
     }
 
     public void setCurrentBeatmap(Beatmap beatmap) {

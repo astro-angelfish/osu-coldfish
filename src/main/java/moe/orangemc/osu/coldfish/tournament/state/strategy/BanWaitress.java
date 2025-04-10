@@ -12,7 +12,7 @@ public class BanWaitress extends PickingWaitress {
     }
 
     public void captureCommandIssue(Room room, User performer, String mapId) {
-        if (!room.isStateCurrent(this) || !room.isActiveTeam(room.getPlayerTeam(performer))) {
+        if (room.notStateCurrent(this) || room.notActiveTeam(room.getPlayerTeam(performer))) {
             return;
         }
 

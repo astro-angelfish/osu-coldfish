@@ -35,7 +35,7 @@ public class RollWaitress implements StateWaitress {
     }
 
     public void captureRoll(Room room, User roller, int value) {
-        if (completedRoom.contains(room) || !room.isStateCurrent(this)) {
+        if (completedRoom.contains(room) || room.notStateCurrent(this)) {
             return;
         }
 

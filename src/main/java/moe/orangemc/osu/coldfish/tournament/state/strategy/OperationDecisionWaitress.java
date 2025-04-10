@@ -21,7 +21,7 @@ public class OperationDecisionWaitress implements StateWaitress {
     }
 
     public void captureCommandIssue(Room room, User performer, boolean actFirst) {
-        if (!room.isStateCurrent(this) || !room.isActiveTeam(room.getPlayerTeam(performer))) {
+        if (room.notStateCurrent(this) || room.notActiveTeam(room.getPlayerTeam(performer))) {
             return;
         }
 

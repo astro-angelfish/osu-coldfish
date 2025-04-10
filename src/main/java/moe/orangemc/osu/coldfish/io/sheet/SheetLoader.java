@@ -17,6 +17,8 @@ public interface SheetLoader {
     TeamMode readTeamMode();
     WinCondition readWinCondition();
 
+    int readTeamSize();
+
     int readPickTime();
     int readPrepareTime();
 
